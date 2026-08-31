@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
+use App\Models\Usuario;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
 
 // Mostrar el formulario con los roles
-    public function editRoles(User $user)
+    public function editRoles(Usuario $user)
     {
         // Traemos todos los roles de la base de datos
         $roles = Role::all(); 
@@ -37,7 +37,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::latest()->paginate(10);
+        $users = Usuario::latest()->paginate(10);
     
     // IMPORTANTE: Asegurate que diga 'users.index' y que tenga el return
     return view('users.index', compact('users'));

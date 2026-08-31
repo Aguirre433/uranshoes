@@ -3,7 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Jor;
-use App\Models\User;
+use App\Models\Usuario;
 use Illuminate\Auth\Access\Response;
 
 class JorPolicy
@@ -11,7 +11,7 @@ class JorPolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): bool
+    public function viewAny(Usuario $user): bool
     {
         return false;
     }
@@ -19,7 +19,7 @@ class JorPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Jor $jor): bool
+    public function view(Usuario $user, Jor $jor): bool
     {
         return false;
     }
@@ -27,7 +27,7 @@ class JorPolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(Usuario $user): bool
     {
         return false;
     }
@@ -35,7 +35,7 @@ class JorPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Jor $jor): bool
+    public function update(Usuario $user, Jor $jor): bool
     {
         return false;
     }
@@ -43,7 +43,7 @@ class JorPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Jor $jor): bool
+    public function delete(Usuario $user, Jor $jor): bool
     {
         return false;
     }
@@ -51,7 +51,7 @@ class JorPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Jor $jor): bool
+    public function restore(Usuario $user, Jor $jor): bool
     {
         return false;
     }
@@ -59,7 +59,7 @@ class JorPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Jor $jor): bool
+    public function forceDelete(Usuario $user, Jor $jor): bool
     {
         return false;
     }

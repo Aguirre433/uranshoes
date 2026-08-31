@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\User;
+use App\Models\Usuario;
 
 class UserSeeder extends Seeder
 {
@@ -15,21 +15,21 @@ class UserSeeder extends Seeder
     {
 
         // Creamos un usuario administrador por defecto
-        $admin = User::create([
+        $admin = Usuario::create([
             'name' => 'Admin',
             'email' => 'admin@example.com',
             'password' => bcrypt('1234')
         ]);
         $admin->assignRole('Administrador');
 
-        $usuario1 = User::create([
+        $usuario1 = Usuario::create([
             'name' => 'Carlos VIllalba',
             'email' => 'carlos@example.com',
             'password' => bcrypt('1234')
         ]);
         $usuario1->assignRole('Empleado');
 
-        $usuario2 = User::create([
+        $usuario2 = Usuario::create([
             'name' => 'Juan Perez',
             'email' => 'juanperez@example.com',
             'password' => bcrypt('1234')
