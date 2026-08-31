@@ -11,10 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pruebas', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
+        Schema::create('municipios', function (Blueprint $table) {
+    $table->id();
+    $table->string('nombre');
+
+    $table->foreignId('provincia_id')
+          ->constrained('provincias')
+          ->onDelete('cascade');
+
+    $table->timestamps();
+    });
     }
 
     /**
@@ -22,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pruebas');
+        Schema::dropIfExists('municipios');
     }
 };
