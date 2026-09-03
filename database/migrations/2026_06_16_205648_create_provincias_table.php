@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sucursal', function (Blueprint $table) {
+        Schema::create('provincias', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre_sucursal', 100);
-            $table->string('direccion_sucursal', 255);
-            $table->timestamps();
+            $table->string('nombre', 100)->unique()->nullable(false);
+            $table->string('municipio', 100)->unique()->nullable(false);
         });
     }
 
@@ -24,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sucursals');
+        Schema::dropIfExists('provincias');
     }
 };

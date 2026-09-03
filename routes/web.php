@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CategoriasController;
 
 // -----------------------------------------------------------------------------
 // RUTAS PÚBLICAS
@@ -54,3 +55,8 @@ Route::get('/tutorial', function () {
 // -----------------------------------------------------------------------------
 
 require __DIR__.'/auth.php';
+
+use App\Http\Controllers\ProductoController;
+
+Route::resource('productos', ProductoController::class);
+Route::resource('categorias', CategoriasController::class);

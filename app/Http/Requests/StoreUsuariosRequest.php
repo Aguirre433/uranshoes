@@ -9,21 +9,17 @@ class StoreUsuariosRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
-    {
-        return false;
-    }
+$request->validate([
+    'nombre_usuario' => ['required', 'string', 'max:100'],
+    'email_usuario' => ['required', 'string', 'lowercase', 'email', 'max:100', 'unique:'.Usuario::class],
+    'contrasena_usuario' => ['required', 'confirmed', Rules\Password::defaults()],
+]);
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, ValidationRule|array<mixed>|string>
-     */
-    public function rules(): array
-    {
-        return [
-            //
-        ];
-    }
+$user = Usuario::create([
+    'nombre_usuario' => $request->nombre_usuario,
+    'email_usuario' => $request->email_usuario,
+    'contrasena_usuario' => Hash::make($request->contrasena_usuario),
+    'rol_usuario' => 'cliente', // O el rol por defecto que manejes
+    'sucursal_id' => 1, // ID de sucursal por defecto
+]);
 }

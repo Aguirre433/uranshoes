@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Categorias;
+use App\Models\Categoria;
 use App\Http\Requests\StoreCategoriasRequest;
 use App\Http\Requests\UpdateCategoriasRequest;
 
@@ -13,7 +13,9 @@ class CategoriasController extends Controller
      */
     public function index()
     {
-        //
+        $categorias = Categoria::all();
+
+        return view('categoria.index', compact('categorias'));
     }
 
     /**
@@ -21,7 +23,7 @@ class CategoriasController extends Controller
      */
     public function create()
     {
-        //
+        return view('categoria.create');
     }
 
     /**
@@ -29,38 +31,50 @@ class CategoriasController extends Controller
      */
     public function store(StoreCategoriasRequest $request)
     {
-        //
+        Categoria::create($request->validated());
+
+        return redirect()
+            ->route('categorias.index')
+            ->with('success', 'Categoría creada correctamente.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Categorias $categorias)
+    public function show(Categoria $categoria)
     {
-        //
+        return view('categoria.show', compact('categoria'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Categorias $categorias)
+    public function edit(Categoria $categoria)
     {
-        //
+        return view('categoria.edit', compact('categoria'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCategoriasRequest $request, Categorias $categorias)
+    public function update(UpdateCategoriasRequest $request, Categoria $categoria)
     {
-        //
+        $categoria->update($request->validated());
+
+        return redirect()
+            ->route('categorias.index')
+            ->with('success', 'Categoría actualizada correctamente.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Categorias $categorias)
+    public function destroy(Categoria $categoria)
     {
-        //
+        $categoria->delete();
+
+        return redirect()
+            ->route('categorias.index')
+            ->with('success', 'Categoría eliminada correctamente.');
     }
 }
