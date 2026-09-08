@@ -19,4 +19,8 @@ class Categoria extends Model
     {
         return $this->hasMany(Producto::class, 'categoria_id');
     }
+    public function proveedores()
+   {
+    return $this->hasMany(Proveedor::class);
+   }
 }

@@ -4,24 +4,34 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Producto;
-use App\Models\Comprobantes;
 
 class Proveedor extends Model
 {
-    /** @use HasFactory<\Database\Factories\ProveedorFactory> */
     use HasFactory;
+
+    protected $table = 'proveedores';
+
     protected $fillable = [
-        'nombre_proveedor',
-        'email_proveedor',
-        'telefono_proveedor',
-        'direccion_proveedor',
-        'cuit_proveedor',
+        'nombre',
+        'email',
+        'telefono',
+        'direccion',
+        'cuit',
+        'provincia_id',
+        'municipio_id',
+        'categoria_id',
     ];
 
-    public function comprobantes()
+    public function categoria()
+{
+    return $this->belongsTo(Categoria::class);
+}
+    public function provincia()
     {
-        return $this->hasMany(Comprobantes::class, 'proveedor_id');
+        return $this->belongsTo(Provincia::class);
     }
-    
+    public function municipio()
+    {
+        return $this->belongsTo(Municipio::class);
+    }
 }

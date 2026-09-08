@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('provincias', function (Blueprint $table) {
-            $table->id();
-            $table->string('nombre', 100)->unique()->nullable(false);
-            $table->string('municipio', 100)->unique()->nullable(false);
-        });
+        Schema::create('categorias', function (Blueprint $table) {
+     $table->id();
+     $table->string('nombre');
+     $table->string('descripcion')->nullable();
+     $table->timestamps();
+     });
     }
 
     /**
@@ -23,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('provincias');
+        Schema::dropIfExists('categorias');
     }
 };

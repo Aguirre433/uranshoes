@@ -11,14 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('proveedores', function (Blueprint $table) {
+       Schema::create('sucursales', function (Blueprint $table) {
     $table->id();
 
     $table->string('nombre');
-    $table->string('email')->nullable();
-    $table->string('telefono')->nullable();
     $table->string('direccion')->nullable();
-    $table->string('cuit')->unique();
+    $table->string('telefono')->nullable();
 
     $table->foreignId('provincia_id')
           ->nullable()
@@ -32,14 +30,13 @@ return new class extends Migration
 
     $table->timestamps();
      });
-    }
+}
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('proveedors');
-        
+        Schema::dropIfExists('sucursals');
     }
 };
