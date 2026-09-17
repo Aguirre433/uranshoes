@@ -1,556 +1,268 @@
-```blade
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>UrbanShoes | Zapatillas</title>
-
+    <title>UrbanShoes | Catálogo Exclusivo</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800,900&display=swap" rel="stylesheet" />
-
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
+<body class="bg-gray-100 text-gray-900 font-sans antialiased min-h-screen flex flex-col justify-between">
 
-<body class="bg-white text-gray-900 font-sans antialiased">
+    <!-- HEADER / NAVBAR -->
+    <header class="bg-black text-white sticky top-0 z-50 border-b border-gray-800 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <a href="{{ url('/') }}" class="flex items-center gap-2 group">
+                <span class="bg-orange-500 text-black font-black p-1.5 rounded-lg text-lg group-hover:scale-105 transition">US</span>
+                <span class="text-xl font-black tracking-tight text-white">Urban<span class="text-orange-500">Shoes</span></span>
+            </a>
 
-    <!-- NAVBAR -->
-    <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-            <div class="h-20 flex items-center justify-between">
-
-                <!-- LOGO -->
-                <a href="{{ url('/') }}" class="flex items-center gap-3">
-                    <div class="bg-black text-white w-10 h-10 rounded-xl flex items-center justify-center text-xl">
-                        👟
-                    </div>
-
-                    <div>
-                        <span class="font-black text-2xl tracking-tight">
-                            Urban<span class="text-gray-500">Shoes</span>
-                        </span>
-
-                        <p class="text-[10px] uppercase tracking-[0.25em] text-gray-400 -mt-1">
-                            Street & Sport
-                        </p>
-                    </div>
+            <nav class="flex items-center gap-6 text-sm font-bold">
+                <a href="{{ url('/') }}" class="text-gray-300 hover:text-white transition">Inicio</a>
+                <a href="{{ url('/') }}" class="text-orange-500 border-b-2 border-orange-500 pb-0.5">Catálogo</a>
+                <a href="#" class="text-gray-300 hover:text-white transition flex items-center gap-1">
+                    🛒 Carrito <span class="bg-orange-500 text-black text-xs font-black px-1.5 py-0.5 rounded-full">0</span>
                 </a>
 
-                <!-- MENU -->
-                <nav class="hidden md:flex items-center gap-8">
-
-                    <a href="{{ url('/') }}"
-                       class="text-sm font-semibold text-gray-900 hover:text-gray-500 transition">
-                        Inicio
+                @auth
+                    <a href="{{ url('/dashboard') }}" class="bg-orange-500 hover:bg-orange-600 text-black px-4 py-2 rounded-lg font-black transition">
+                        Panel Admin
                     </a>
-
-                    <a href="#productos"
-                       class="text-sm font-semibold text-gray-600 hover:text-gray-900 transition">
-                        Zapatillas
+                @else
+                    <a href="{{ route('login') }}" class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg transition">
+                        Ingresar
                     </a>
-
-                    <a href="#categorias"
-                       class="text-sm font-semibold text-gray-600 hover:text-gray-900 transition">
-                        Categorías
-                    </a>
-
-                    <a href="#ofertas"
-                       class="text-sm font-semibold text-gray-600 hover:text-gray-900 transition">
-                        Ofertas
-                    </a>
-
-                </nav>
-
-                <!-- ACCIONES -->
-                <div class="flex items-center gap-3">
-
-                    <!-- Carrito -->
-                    <button class="hidden sm:flex w-10 h-10 rounded-full bg-gray-100 items-center justify-center hover:bg-gray-200 transition">
-                        🛒
-                    </button>
-
-                    @if (Route::has('login'))
-
-                        @auth
-
-                            <a href="{{ url('/dashboard') }}"
-                               class="bg-black text-white px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-gray-800 transition">
-                                Mi cuenta
-                            </a>
-
-                        @else
-
-                            <a href="{{ route('login') }}"
-                               class="text-sm font-bold text-gray-700 hover:text-black transition">
-                                Ingresar
-                            </a>
-
-                            @if (Route::has('register'))
-
-                                <a href="{{ route('register') }}"
-                                   class="bg-black text-white px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-gray-800 transition">
-                                    Registrarse
-                                </a>
-
-                            @endif
-
-                        @endauth
-
-                    @endif
-
-                </div>
-
-            </div>
-
+                @endauth
+            </nav>
         </div>
     </header>
 
-
-    <!-- HERO -->
-    <section class="bg-gray-100 overflow-hidden">
-
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-            <div class="grid lg:grid-cols-2 items-center min-h-[600px] py-16 lg:py-20">
-
-                <!-- TEXTO -->
-                <div class="max-w-xl">
-
-                    <p class="uppercase tracking-[0.3em] text-sm font-bold text-gray-500 mb-5">
-                        Nueva colección
-                    </p>
-
-                    <h1 class="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-none">
-                        TU ESTILO.
-                        <br>
-                        <span class="text-gray-500">TUS ZAPAS.</span>
-                    </h1>
-
-                    <p class="mt-7 text-lg text-gray-600 leading-relaxed max-w-lg">
-                        Descubrí nuestra colección de zapatillas urbanas,
-                        deportivas y casuales. Encontrá el modelo que representa tu estilo.
-                    </p>
-
-                    <div class="mt-9 flex flex-wrap gap-4">
-
-                        <a href="#productos"
-                           class="bg-black text-white px-7 py-4 rounded-xl font-bold hover:bg-gray-800 transition">
-                            Ver zapatillas
-                        </a>
-
-                        <a href="#categorias"
-                           class="bg-white text-gray-900 px-7 py-4 rounded-xl font-bold border border-gray-300 hover:bg-gray-50 transition">
-                            Explorar categorías
-                        </a>
-
-                    </div>
-
+    <!-- MAIN CONTENT AREA -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full flex-1">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            
+            <!-- FILTROS -->
+            <aside class="bg-white p-6 rounded-2xl border border-gray-200/80 shadow-sm h-fit sticky top-24">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-lg font-black text-gray-900">Filtrar Productos</h2>
+                    <span class="text-xs bg-orange-100 text-orange-700 font-bold px-2 py-0.5 rounded-md">Filtros</span>
                 </div>
+                <div class="w-full h-0.5 bg-gray-100 mb-6"></div>
 
-
-                <!-- IMAGEN / PRODUCTO DESTACADO -->
-                <div class="relative mt-12 lg:mt-0">
-
-                    <div class="bg-white rounded-3xl p-8 shadow-xl rotate-2">
-
-                        <div class="aspect-square bg-gray-100 rounded-2xl flex items-center justify-center">
-
-                            <div class="text-center">
-
-                                <div class="text-8xl mb-6">
-                                    👟
-                                </div>
-
-                                <p class="text-sm uppercase tracking-widest text-gray-400 font-bold">
-                                    UrbanShoes
-                                </p>
-
-                            </div>
-
-                        </div>
-
+                <form action="{{ url('/') }}" method="GET" class="space-y-5">
+                    <div>
+                        <label for="marca" class="block text-xs font-bold uppercase tracking-wider text-gray-600 mb-1.5">Marca</label>
+                        <select id="marca" name="marca" class="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent p-3 outline-none transition">
+                            <option value="">Todas las marcas</option>
+                            <option value="Nike" {{ request('marca') == 'Nike' ? 'selected' : '' }}>Nike</option>
+                            <option value="Adidas" {{ request('marca') == 'Adidas' ? 'selected' : '' }}>Adidas</option>
+                            <option value="Puma" {{ request('marca') == 'Puma' ? 'selected' : '' }}>Puma</option>
+                        </select>
                     </div>
 
-                    <!-- ETIQUETA -->
-                    <div class="absolute -bottom-5 -left-5 bg-black text-white px-6 py-4 rounded-2xl shadow-lg">
-                        <p class="text-xs text-gray-400 uppercase tracking-wider">
-                            Desde
-                        </p>
-
-                        <p class="text-xl font-black">
-                            $89.999
-                        </p>
+                    <div>
+                        <label for="talle" class="block text-xs font-bold uppercase tracking-wider text-gray-600 mb-1.5">Talle</label>
+                        <select id="talle" name="talle" class="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent p-3 outline-none transition">
+                            <option value="">Todos los talles</option>
+                            <option value="39" {{ request('talle') == '39' ? 'selected' : '' }}>39</option>
+                            <option value="40" {{ request('talle') == '40' ? 'selected' : '' }}>40</option>
+                            <option value="41" {{ request('talle') == '41' ? 'selected' : '' }}>41</option>
+                            <option value="42" {{ request('talle') == '42' ? 'selected' : '' }}>42</option>
+                        </select>
                     </div>
 
-                </div>
+                    <div>
+                        <label for="precio" class="block text-xs font-bold uppercase tracking-wider text-gray-600 mb-1.5">Precio Máximo ($)</label>
+                        <input type="number" id="precio" name="precio" value="{{ request('precio', 90000) }}" class="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent p-3 outline-none transition">
+                    </div>
 
-            </div>
+                    <button type="submit" class="w-full bg-orange-500 hover:bg-orange-600 text-black font-black py-3 px-4 rounded-xl text-sm transition shadow-lg shadow-orange-500/20 active:scale-95">
+                        Aplicar Filtros
+                    </button>
+                </form>
+            </aside>
 
+<!-- GRILLA DE 2 COLUMNAS CON TUS NOMBRES EXACTOS DE ARCHIVO -->
+<section class="lg:col-span-3">
+    <div class="flex justify-between items-center mb-6">
+        <div>
+            <h1 class="text-2xl font-black text-gray-900 tracking-tight">Catálogo de Zapatillas</h1>
+            <p class="text-xs text-gray-500">Vista en 2 columnas</p>
         </div>
+        <span class="text-xs font-bold bg-white px-3 py-1.5 rounded-full border border-gray-200 shadow-sm text-gray-600">
+            6 Productos
+        </span>
+    </div>
 
-    </section>
+    <!-- CONTENEDOR EN 2 COLUMNAS (IZQUIERDA Y DERECHA) -->
+    <div class="grid grid-cols-2 gap-4">
 
-
-    <!-- CATEGORIAS -->
-    <section id="categorias" class="py-20">
-
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-            <div class="flex items-end justify-between mb-10">
-
+        <!-- 1. PRODUCTOS DE BASE DE DATOS -->
+        @foreach($productos ?? [] as $producto)
+            <article class="bg-white rounded-xl border border-gray-200/80 shadow-sm hover:shadow-md transition duration-300 overflow-hidden flex flex-col justify-between group">
                 <div>
-                    <p class="text-sm uppercase tracking-widest font-bold text-gray-400">
-                        Explorá
-                    </p>
+                    <div class="bg-gray-50 h-36 overflow-hidden relative flex items-center justify-center p-2">
+                        @if(!empty($producto->imagen))
+                            <img src="{{ asset('storage/' . $producto->imagen) }}" 
+                                 alt="{{ $producto->nombre }}" 
+                                 class="max-h-full max-w-full object-contain group-hover:scale-105 transition duration-300">
+                        @else
+                            <img src="{{ asset('zapatillas/adidas.jpeg') }}" 
+                                 alt="{{ $producto->nombre }}" 
+                                 class="max-h-full max-w-full object-contain group-hover:scale-105 transition duration-300">
+                        @endif
 
-                    <h2 class="text-3xl sm:text-4xl font-black mt-2">
-                        Categorías
-                    </h2>
-                </div>
-
-            </div>
-
-
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-
-                <div class="group bg-gray-100 rounded-2xl p-7 hover:bg-black hover:text-white transition cursor-pointer">
-                    <div class="text-4xl mb-8">🏃</div>
-
-                    <h3 class="text-xl font-black">
-                        Running
-                    </h3>
-
-                    <p class="text-sm text-gray-500 group-hover:text-gray-400 mt-2">
-                        Rendimiento y comodidad
-                    </p>
-                </div>
-
-
-                <div class="group bg-gray-100 rounded-2xl p-7 hover:bg-black hover:text-white transition cursor-pointer">
-                    <div class="text-4xl mb-8">🏀</div>
-
-                    <h3 class="text-xl font-black">
-                        Deportivas
-                    </h3>
-
-                    <p class="text-sm text-gray-500 group-hover:text-gray-400 mt-2">
-                        Para superar tus límites
-                    </p>
-                </div>
-
-
-                <div class="group bg-gray-100 rounded-2xl p-7 hover:bg-black hover:text-white transition cursor-pointer">
-                    <div class="text-4xl mb-8">👟</div>
-
-                    <h3 class="text-xl font-black">
-                        Urbanas
-                    </h3>
-
-                    <p class="text-sm text-gray-500 group-hover:text-gray-400 mt-2">
-                        Estilo para todos los días
-                    </p>
-                </div>
-
-
-                <div class="group bg-gray-100 rounded-2xl p-7 hover:bg-black hover:text-white transition cursor-pointer">
-                    <div class="text-4xl mb-8">✨</div>
-
-                    <h3 class="text-xl font-black">
-                        Casual
-                    </h3>
-
-                    <p class="text-sm text-gray-500 group-hover:text-gray-400 mt-2">
-                        Comodidad y estilo
-                    </p>
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- PRODUCTOS -->
-    <section id="productos" class="py-20 bg-gray-50">
-
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-            <div class="flex items-end justify-between mb-10">
-
-                <div>
-                    <p class="text-sm uppercase tracking-widest font-bold text-gray-400">
-                        Selección UrbanShoes
-                    </p>
-
-                    <h2 class="text-3xl sm:text-4xl font-black mt-2">
-                        Productos destacados
-                    </h2>
-                </div>
-
-                <a href="#productos"
-                   class="hidden sm:block text-sm font-bold underline underline-offset-4">
-                    Ver todos
-                </a>
-
-            </div>
-
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-
-
-                <!-- PRODUCTO 1 -->
-                <article class="bg-white rounded-2xl overflow-hidden border border-gray-200 group">
-
-                    <div class="aspect-square bg-gray-100 flex items-center justify-center relative">
-
-                        <span class="absolute top-4 left-4 bg-black text-white text-xs font-bold px-3 py-1.5 rounded-full">
-                            DESTACADO
+                        <span class="absolute top-2 right-2 bg-emerald-100 text-emerald-800 text-[9px] font-black px-2 py-0.5 rounded-full uppercase">
+                            Disponible
                         </span>
-
-                        <span class="text-7xl group-hover:scale-110 transition duration-300">
-                            👟
-                        </span>
-
                     </div>
-
-                    <div class="p-5">
-
-                        <p class="text-xs uppercase tracking-wider text-gray-400 font-bold">
-                            Nike
+                    <div class="p-3">
+                        <p class="text-[10px] uppercase tracking-widest text-orange-500 font-black">
+                            {{ $producto->marca->nombre ?? 'MARCA' }}
                         </p>
-
-                        <h3 class="font-black text-lg mt-1">
-                            Air Max Urban
+                        <h3 class="font-bold text-gray-900 text-sm mt-0.5 leading-tight truncate">
+                            {{ $producto->nombre }}
                         </h3>
-
-                        <div class="flex items-center justify-between mt-5">
-
-                            <span class="font-black text-xl">
-                                $129.999
-                            </span>
-
-                            <button class="bg-black text-white w-10 h-10 rounded-full hover:bg-gray-800 transition">
-                                +
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                </article>
-
-
-                <!-- PRODUCTO 2 -->
-                <article class="bg-white rounded-2xl overflow-hidden border border-gray-200 group">
-
-                    <div class="aspect-square bg-gray-100 flex items-center justify-center relative">
-
-                        <span class="absolute top-4 left-4 bg-white text-black text-xs font-bold px-3 py-1.5 rounded-full">
-                            NUEVO
-                        </span>
-
-                        <span class="text-7xl group-hover:scale-110 transition duration-300">
-                            👟
-                        </span>
-
-                    </div>
-
-                    <div class="p-5">
-
-                        <p class="text-xs uppercase tracking-wider text-gray-400 font-bold">
-                            Adidas
+                        <p class="text-xs text-gray-500 mt-1">Talle: {{ $producto->talle ?? 'N/A' }}</p>
+                        <p class="text-lg font-black text-gray-900 mt-2">
+                            $ {{ number_format($producto->precio, 0, ',', '.') }}
                         </p>
-
-                        <h3 class="font-black text-lg mt-1">
-                            Forum Street
-                        </h3>
-
-                        <div class="flex items-center justify-between mt-5">
-
-                            <span class="font-black text-xl">
-                                $109.999
-                            </span>
-
-                            <button class="bg-black text-white w-10 h-10 rounded-full hover:bg-gray-800 transition">
-                                +
-                            </button>
-
-                        </div>
-
                     </div>
-
-                </article>
-
-
-                <!-- PRODUCTO 3 -->
-                <article class="bg-white rounded-2xl overflow-hidden border border-gray-200 group">
-
-                    <div class="aspect-square bg-gray-100 flex items-center justify-center">
-
-                        <span class="text-7xl group-hover:scale-110 transition duration-300">
-                            👟
-                        </span>
-
-                    </div>
-
-                    <div class="p-5">
-
-                        <p class="text-xs uppercase tracking-wider text-gray-400 font-bold">
-                            Puma
-                        </p>
-
-                        <h3 class="font-black text-lg mt-1">
-                            Suede Classic
-                        </h3>
-
-                        <div class="flex items-center justify-between mt-5">
-
-                            <span class="font-black text-xl">
-                                $94.999
-                            </span>
-
-                            <button class="bg-black text-white w-10 h-10 rounded-full hover:bg-gray-800 transition">
-                                +
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                </article>
-
-
-                <!-- PRODUCTO 4 -->
-                <article class="bg-white rounded-2xl overflow-hidden border border-gray-200 group">
-
-                    <div class="aspect-square bg-gray-100 flex items-center justify-center">
-
-                        <span class="text-7xl group-hover:scale-110 transition duration-300">
-                            👟
-                        </span>
-
-                    </div>
-
-                    <div class="p-5">
-
-                        <p class="text-xs uppercase tracking-wider text-gray-400 font-bold">
-                            New Balance
-                        </p>
-
-                        <h3 class="font-black text-lg mt-1">
-                            574 Classic
-                        </h3>
-
-                        <div class="flex items-center justify-between mt-5">
-
-                            <span class="font-black text-xl">
-                                $119.999
-                            </span>
-
-                            <button class="bg-black text-white w-10 h-10 rounded-full hover:bg-gray-800 transition">
-                                +
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                </article>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- OFERTA -->
-    <section id="ofertas" class="py-20">
-
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-            <div class="bg-black text-white rounded-3xl overflow-hidden">
-
-                <div class="px-8 py-16 sm:px-16 text-center">
-
-                    <p class="text-sm uppercase tracking-[0.3em] text-gray-400 font-bold">
-                        UrbanShoes
-                    </p>
-
-                    <h2 class="text-4xl sm:text-5xl font-black mt-4">
-                        Tu próximo par está acá.
-                    </h2>
-
-                    <p class="text-gray-400 mt-5 max-w-xl mx-auto">
-                        Explorá nuestra colección y encontrá las zapatillas
-                        que mejor se adapten a tu estilo.
-                    </p>
-
-                    <a href="#productos"
-                       class="inline-block mt-8 bg-white text-black px-8 py-4 rounded-xl font-black hover:bg-gray-200 transition">
-                        Explorar colección
+                </div>
+                <div class="px-3 pb-3">
+                    <a href="{{ route('productos.show', $producto->id) }}" class="block w-full text-center bg-black hover:bg-orange-500 hover:text-black text-white font-bold py-1.5 rounded-lg text-xs transition duration-200">
+                        Ver Detalle
                     </a>
-
                 </div>
+            </article>
+        @endforeach
 
+        <!-- 2. TUS 6 IMÁGENES REALES EN PUBLIC/ZAPATILLAS/ -->
+
+        <!-- ZAPATILLA 1: adidas.jpeg -->
+        <article class="bg-white rounded-xl border border-gray-200/80 shadow-sm hover:shadow-md transition duration-300 overflow-hidden flex flex-col justify-between group">
+            <div>
+                <div class="bg-gray-50 h-36 overflow-hidden relative flex items-center justify-center p-2">
+                    <img src="{{ asset('zapatillas/adidas.jpeg') }}" alt="Adidas" class="max-h-full max-w-full object-contain group-hover:scale-105 transition duration-300">
+                    <span class="absolute top-2 right-2 bg-emerald-100 text-emerald-800 text-[9px] font-black px-2 py-0.5 rounded-full uppercase">Stock: 5</span>
+                </div>
+                <div class="p-3">
+                    <p class="text-[10px] uppercase tracking-widest text-orange-500 font-black">ADIDAS</p>
+                    <h3 class="font-bold text-gray-900 text-sm mt-0.5 leading-tight truncate">Grand Court 2.0</h3>
+                    <p class="text-xs text-gray-500 mt-1">Talle: 40</p>
+                    <p class="text-lg font-black text-gray-900 mt-2">$ 72.000</p>
+                </div>
             </div>
+            <div class="px-3 pb-3">
+                <button class="w-full bg-black hover:bg-orange-500 hover:text-black text-white font-bold py-1.5 rounded-lg text-xs transition">Ver Detalle</button>
+            </div>
+        </article>
 
+        <!-- ZAPATILLA 2: adidas2.jpeg -->
+        <article class="bg-white rounded-xl border border-gray-200/80 shadow-sm hover:shadow-md transition duration-300 overflow-hidden flex flex-col justify-between group">
+            <div>
+                <div class="bg-gray-50 h-36 overflow-hidden relative flex items-center justify-center p-2">
+                    <img src="{{ asset('zapatillas/adidas2.jpeg') }}" alt="Adidas 2" class="max-h-full max-w-full object-contain group-hover:scale-105 transition duration-300">
+                    <span class="absolute top-2 right-2 bg-emerald-100 text-emerald-800 text-[9px] font-black px-2 py-0.5 rounded-full uppercase">Stock: 3</span>
+                </div>
+                <div class="p-3">
+                    <p class="text-[10px] uppercase tracking-widest text-orange-500 font-black">ADIDAS</p>
+                    <h3 class="font-bold text-gray-900 text-sm mt-0.5 leading-tight truncate">Runfalcon 3.0</h3>
+                    <p class="text-xs text-gray-500 mt-1">Talle: 41</p>
+                    <p class="text-lg font-black text-gray-900 mt-2">$ 82.000</p>
+                </div>
+            </div>
+            <div class="px-3 pb-3">
+                <button class="w-full bg-black hover:bg-orange-500 hover:text-black text-white font-bold py-1.5 rounded-lg text-xs transition">Ver Detalle</button>
+            </div>
+        </article>
+
+        <!-- ZAPATILLA 3: campus.jpeg -->
+        <article class="bg-white rounded-xl border border-gray-200/80 shadow-sm hover:shadow-md transition duration-300 overflow-hidden flex flex-col justify-between group">
+            <div>
+                <div class="bg-gray-50 h-36 overflow-hidden relative flex items-center justify-center p-2">
+                    <img src="{{ asset('zapatillas/campus.jpeg') }}" alt="Campus" class="max-h-full max-w-full object-contain group-hover:scale-105 transition duration-300">
+                    <span class="absolute top-2 right-2 bg-emerald-100 text-emerald-800 text-[9px] font-black px-2 py-0.5 rounded-full uppercase">Stock: 4</span>
+                </div>
+                <div class="p-3">
+                    <p class="text-[10px] uppercase tracking-widest text-orange-500 font-black">ADIDAS</p>
+                    <h3 class="font-bold text-gray-900 text-sm mt-0.5 leading-tight truncate">Campus 00s</h3>
+                    <p class="text-xs text-gray-500 mt-1">Talle: 42</p>
+                    <p class="text-lg font-black text-gray-900 mt-2">$ 95.000</p>
+                </div>
+            </div>
+            <div class="px-3 pb-3">
+                <button class="w-full bg-black hover:bg-orange-500 hover:text-black text-white font-bold py-1.5 rounded-lg text-xs transition">Ver Detalle</button>
+            </div>
+        </article>
+
+        <!-- ZAPATILLA 4: images.jpeg -->
+        <article class="bg-white rounded-xl border border-gray-200/80 shadow-sm hover:shadow-md transition duration-300 overflow-hidden flex flex-col justify-between group">
+            <div>
+                <div class="bg-gray-50 h-36 overflow-hidden relative flex items-center justify-center p-2">
+                    <img src="{{ asset('zapatillas/images.jpeg') }}" alt="Urban Mix" class="max-h-full max-w-full object-contain group-hover:scale-105 transition duration-300">
+                    <span class="absolute top-2 right-2 bg-emerald-100 text-emerald-800 text-[9px] font-black px-2 py-0.5 rounded-full uppercase">Stock: 8</span>
+                </div>
+                <div class="p-3">
+                    <p class="text-[10px] uppercase tracking-widest text-orange-500 font-black">PUMA</p>
+                    <h3 class="font-bold text-gray-900 text-sm mt-0.5 leading-tight truncate">Smash v2</h3>
+                    <p class="text-xs text-gray-500 mt-1">Talle: 39</p>
+                    <p class="text-lg font-black text-gray-900 mt-2">$ 68.000</p>
+                </div>
+            </div>
+            <div class="px-3 pb-3">
+                <button class="w-full bg-black hover:bg-orange-500 hover:text-black text-white font-bold py-1.5 rounded-lg text-xs transition">Ver Detalle</button>
+            </div>
+        </article>
+
+        <!-- ZAPATILLA 5: nike.jpeg -->
+        <article class="bg-white rounded-xl border border-gray-200/80 shadow-sm hover:shadow-md transition duration-300 overflow-hidden flex flex-col justify-between group">
+            <div>
+                <div class="bg-gray-50 h-36 overflow-hidden relative flex items-center justify-center p-2">
+                    <img src="{{ asset('zapatillas/nike.jpeg') }}" alt="Nike" class="max-h-full max-w-full object-contain group-hover:scale-105 transition duration-300">
+                    <span class="absolute top-2 right-2 bg-emerald-100 text-emerald-800 text-[9px] font-black px-2 py-0.5 rounded-full uppercase">Stock: 6</span>
+                </div>
+                <div class="p-3">
+                    <p class="text-[10px] uppercase tracking-widest text-orange-500 font-black">NIKE</p>
+                    <h3 class="font-bold text-gray-900 text-sm mt-0.5 leading-tight truncate">Air Max SC</h3>
+                    <p class="text-xs text-gray-500 mt-1">Talle: 41</p>
+                    <p class="text-lg font-black text-gray-900 mt-2">$ 85.000</p>
+                </div>
+            </div>
+            <div class="px-3 pb-3">
+                <button class="w-full bg-black hover:bg-orange-500 hover:text-black text-white font-bold py-1.5 rounded-lg text-xs transition">Ver Detalle</button>
+            </div>
+        </article>
+
+        <!-- ZAPATILLA 6: nike2.jpeg -->
+        <article class="bg-white rounded-xl border border-gray-200/80 shadow-sm hover:shadow-md transition duration-300 overflow-hidden flex flex-col justify-between group">
+            <div>
+                <div class="bg-gray-50 h-36 overflow-hidden relative flex items-center justify-center p-2">
+                    <img src="{{ asset('zapatillas/nike2.jpeg') }}" alt="Nike 2" class="max-h-full max-w-full object-contain group-hover:scale-105 transition duration-300">
+                    <span class="absolute top-2 right-2 bg-emerald-100 text-emerald-800 text-[9px] font-black px-2 py-0.5 rounded-full uppercase">Stock: 2</span>
+                </div>
+                <div class="p-3">
+                    <p class="text-[10px] uppercase tracking-widest text-orange-500 font-black">NIKE</p>
+                    <h3 class="font-bold text-gray-900 text-sm mt-0.5 leading-tight truncate">Revolution 6</h3>
+                    <p class="text-xs text-gray-500 mt-1">Talle: 42</p>
+                    <p class="text-lg font-black text-gray-900 mt-2">$ 80.000</p>
+                </div>
+            </div>
+            <div class="px-3 pb-3">
+                <button class="w-full bg-black hover:bg-orange-500 hover:text-black text-white font-bold py-1.5 rounded-lg text-xs transition">Ver Detalle</button>
+            </div>
+        </article>
+
+    </div>
+</section>
         </div>
-
-    </section>
-
+    </main>
 
     <!-- FOOTER -->
-    <footer class="bg-gray-950 text-white">
-
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-
-            <div class="flex flex-col md:flex-row justify-between gap-8">
-
-                <div>
-
-                    <div class="flex items-center gap-3">
-
-                        <div class="bg-white text-black w-10 h-10 rounded-xl flex items-center justify-center">
-                            👟
-                        </div>
-
-                        <span class="font-black text-2xl">
-                            UrbanShoes
-                        </span>
-
-                    </div>
-
-                    <p class="text-gray-500 text-sm mt-4 max-w-sm">
-                        Zapatillas, estilo y comodidad.
-                        Todo lo que necesitás para completar tu look.
-                    </p>
-
-                </div>
-
-
-                <div class="text-sm text-gray-500">
-
-                    <p>
-                        © {{ date('Y') }} UrbanShoes.
-                    </p>
-
-                    <p class="mt-1">
-                        Todos los derechos reservados.
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
-
+    <footer class="bg-black text-gray-400 text-xs text-center py-6 border-t border-gray-800">
+        © 2026 <span class="text-white font-bold">UrbanShoes</span> - Envíos exclusivos en Posadas y Garupá
     </footer>
 
 </body>
 </html>
-```
