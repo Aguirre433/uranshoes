@@ -7,6 +7,7 @@ use App\Models\Proveedor;
 use App\Models\Categoria;
 use App\Models\Marca;
 use Illuminate\Http\Request;
+use App\Models\Actividad;
 
 class ProductoController extends Controller
 {
@@ -50,7 +51,16 @@ class ProductoController extends Controller
             'marca_id' => 'required|exists:marcas,id',
         ]);
 
-        Producto::create($request->all());
+        // Guardamos el producto en la variable
+        $producto = Producto::create($request->all());
+
+        // 👈 2. Guardamos la actividad al CREAR
+        Actividad::create([
+            'titulo'      => 'Producto agregado',
+            'descripcion' => $producto->nombre,
+            'tipo'        => 'producto',
+            'user_id' => auth()->user()->getKey(),
+        ]);
 
         return redirect()
             ->route('productos.index')
@@ -86,6 +96,13 @@ class ProductoController extends Controller
 
         $producto->update($request->all());
 
+        Actividad::create([
+            'titulo'      => 'Producto actualizado',
+            'descripcion' => $producto->nombre,
+            'tipo'        => 'producto',
+            'user_id' => auth()->user()->getKey(),
+        ]);
+
         return redirect()
             ->route('productos.index')
             ->with('success', 'Producto actualizado correctamente.');
@@ -93,10 +110,19 @@ class ProductoController extends Controller
 
     public function destroy(Producto $producto)
     {
-        $producto->delete();
+    $nombreProducto = $producto->nombre;
 
-        return redirect()
-            ->route('productos.index')
-            ->with('success', 'Producto eliminado.');
+    $producto->delete();
+
+    Actividad::create([
+        'titulo'      => 'Producto eliminado',
+        'descripcion' => $nombreProducto,
+        'tipo'        => 'producto',
+        'user_id'     => auth()->user()->getKey(),
+    ]);
+
+    return redirect()
+        ->route('productos.index')
+        ->with('success', 'Producto eliminado.');
     }
 }

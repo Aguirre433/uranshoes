@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Compras;
+use App\Models\Compra;
 use App\Http\Requests\StoreComprasRequest;
 use App\Http\Requests\UpdateComprasRequest;
+use App\Models\Actividad;
 
 class ComprasController extends Controller
 {
@@ -13,7 +14,8 @@ class ComprasController extends Controller
      */
     public function index()
     {
-        //
+        $compras = Compra::latest()->get();
+        return view('compras.index', compact('compras'));
     }
 
     /**
@@ -29,8 +31,19 @@ class ComprasController extends Controller
      */
     public function store(StoreComprasRequest $request)
     {
-        //
+        // ... tu lógica para registrar la compra ...
+    $compra = Compra::create($data);
+
+    Actividad::create([
+        'titulo'      => 'Compra registrada',
+        'descripcion' => 'Orden de compra #' . str_pad($compra->id, 5, '0', STR_PAD_LEFT),
+        'tipo'        => 'compra',
+        'user_id'     => auth()->id(),
+    ]);
+
+    return redirect()->route('compras.index')->with('success', 'Compra registrada.');
     }
+    
 
     /**
      * Display the specified resource.

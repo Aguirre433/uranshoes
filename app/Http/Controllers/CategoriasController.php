@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Categoria;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use App\Models\Actividad;
 
 class CategoriasController extends Controller
 {
@@ -23,10 +24,14 @@ class CategoriasController extends Controller
             'descripcion' => 'nullable|string',
         ]);
 
-        Categoria::create([
-            'nombre' => $request->nombre,
-            'descripcion' => $request->descripcion,
-        ]);
+        $categoria = Categoria::create($request->all());
+
+         Actividad::create([
+        'titulo'      => 'Categoría agregada',
+        'descripcion' => $categoria->nombre,
+        'tipo'        => 'categoria',
+        'user_id'     => auth()->user()->getKey()
+         ]);
 
         return redirect()->route('categorias.index')->with('success', 'Categoría guardada con éxito.');
     }
@@ -37,7 +42,7 @@ class CategoriasController extends Controller
         $categorias = Categoria::all();
         $categoriaEditar = Categoria::findOrFail($id);
 
-        return view('categorias.index', compact('categorias', 'categoriaEditar'));
+        return view('categoria.index', compact('categorias', 'categoriaEditar'));
     }
 
     // Actualiza los datos y vuelve a la lista limpia
@@ -53,7 +58,14 @@ class CategoriasController extends Controller
             'nombre' => $request->nombre,
             'descripcion' => $request->descripcion,
         ]);
+        $categoria->update($request->all());
 
+        Actividad::create([
+        'titulo'      => 'Categoría actualizada',
+        'descripcion' => $categoria->nombre,
+        'tipo'        => 'categoria',
+        'user_id'     => auth()->id(),
+        ]);
         return redirect()->route('categorias.index')->with('success', 'Categoría actualizada correctamente.');
     }
 

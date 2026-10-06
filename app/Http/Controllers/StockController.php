@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Stock;
+use App\Models\Producto;
 use App\Http\Requests\StoreStockRequest;
 use App\Http\Requests\UpdateStockRequest;
+use App\Models\Actividad;
 
 class StockController extends Controller
 {
@@ -13,7 +14,8 @@ class StockController extends Controller
      */
     public function index()
     {
-        //
+        $productos = Producto::latest()->get();
+        return view('stock.index', compact('productos'));
     }
 
     /**
@@ -28,9 +30,22 @@ class StockController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(StoreStockRequest $request)
-    {
-        //
-    }
+    
+{
+    // ... lógica para actualizar el stock ...
+    $producto = Producto::findOrFail($productoId);
+    $producto->increment('stock', $request->cantidad);
+
+    Actividad::create([
+        'titulo'      => 'Stock actualizado',
+        'descripcion' => $producto->nombre . ' (' . $request->cantidad . ' un.)',
+        'tipo'        => 'stock',
+        'user_id'     => auth()->id(),
+    ]);
+
+    return redirect()->back()->with('success', 'Stock actualizado.');
+}
+    
 
     /**
      * Display the specified resource.

@@ -172,7 +172,7 @@
                                     value="{{ $categoria->id }}"
                                     {{ old('categoria_id') == $categoria->id ? 'selected' : '' }}
                                 >
-                                    {{ $categoria->nombre_categoria }}
+                                    {{ $categoria->nombre }}
                                 </option>
 
                             @endforeach

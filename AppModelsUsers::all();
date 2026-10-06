@@ -1,0 +1,15 @@
+[90m= [39m[34;4mIlluminate\Database\Eloquent\Collection[39;24m {#8860
+    [34mall[39m: [
+      [34;4mApp\Models\Usuario[39;24m {#8847
+        [34mid[39m: [35m1[39m,
+        [34mnombre_usuario[39m: [32m"[39m[32mAdministrador[39m[32m"[39m,
+        [34memail_usuario[39m: [32m"[39m[32madmin@gmail.com[39m[32m"[39m,
+        #[33mcontrasena_usuario[39m: [32m"[39m\$[32m2y[39m\$[32m12[39m\$[32mJrESi2r21jZa8Ae9zbysiuxPQ3kFz4hcwy.1kbQT1FOj0Dk0Wib62[39m[32m"[39m,
+        [34mrol_usuario[39m: [32m"[39m[32mAdministrador[39m[32m"[39m,
+        [34msucursal_id[39m: [35m1[39m,
+        #[33mremember_token[39m: [36mnull[39m,
+        [34mcreated_at[39m: [32m"[39m[32m2026-09-08 02:18:38[39m[32m"[39m,
+        [34mupdated_at[39m: [32m"[39m[32m2026-09-08 02:18:38[39m[32m"[39m,
+      },
+    ],
+  }

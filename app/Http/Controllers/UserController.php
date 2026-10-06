@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Usuario;
 use Spatie\Permission\Models\Role;
+use App\Models\Actividad;
 
 class UserController extends Controller
 {
@@ -37,10 +38,13 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = Usuario::latest()->paginate(10);
+        
+        // 1. Obtener todos los usuarios de la base de datos
+        $usuarios = Usuario::all(); 
+
+        // 2. Pasar la variable $usuarios a la vista
+        return view('users.index', compact('usuarios'));
     
-    // IMPORTANTE: Asegurate que diga 'users.index' y que tenga el return
-    return view('users.index', compact('users'));
     }
 
     /**
@@ -56,7 +60,16 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $usuario = User::create($data);
+
+    Actividad::create([
+        'titulo'      => 'Nuevo usuario registrado',
+        'descripcion' => $usuario->name,
+        'tipo'        => 'usuario',
+        'user_id'     => auth()->id(),
+    ]);
+
+    return redirect()->route('users.index')->with('success', 'Usuario registrado.');
     }
 
     /**

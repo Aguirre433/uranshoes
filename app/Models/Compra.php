@@ -24,11 +24,11 @@ class Compra extends Model
 
     public function empleado()
     {
-        return $this->belongsTo(Ususario::class, 'usuario_id')
+        return $this->belongsTo(Ususario::class, 'usuario_id');
     }
 
     public function comprobante()
     {
-        return $this->belongsTo(Comprobante::class, 'comprobante_id')
+        return $this->belongsTo(Comprobante::class, 'comprobante_id');
     }
 }

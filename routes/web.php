@@ -4,6 +4,11 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoriasController;
+use App\Http\Controllers\StockController;
+use App\Http\Controllers\ComprasController;
+use App\Http\Controllers\VentaController;
+use App\Models\Actividad;
+
 
 // -----------------------------------------------------------------------------
 // RUTAS PÚBLICAS
@@ -16,7 +21,8 @@ Route::get('/', function () {
 // RUTAS BÁSICAS DE AUTENTICACIÓN (Cualquiera que inicie sesión)
 // -----------------------------------------------------------------------------
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $actividades = Actividad::latest()->take(5)->get();
+    return view('dashboard' , compact('actividades'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -24,6 +30,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+Route::middleware(['auth'])->group(function () {
+
+    // Rutas de Productos
+    Route::resource('productos', ProductoController::class);
+
+    // Rutas de Categorías
+    Route::resource('categorias', CategoriaController::class);
+
+    // Rutas de Usuarios
+    Route::resource('users', UserController::class);
 });
 
 // -----------------------------------------------------------------------------
@@ -60,3 +77,6 @@ use App\Http\Controllers\ProductoController;
 
 Route::resource('productos', ProductoController::class);
 Route::resource('categorias', CategoriasController::class);
+Route::get('/stock', [StockController::class, 'index'])->name('stock.index');
+Route::get('/ventas', [VentaController::class, 'index'])->name('ventas.index');
+Route::get('/compras', [ComprasController::class, 'index'])->name('compras.index');

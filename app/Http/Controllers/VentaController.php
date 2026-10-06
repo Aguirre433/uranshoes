@@ -13,7 +13,8 @@ class VentaController extends Controller
      */
     public function index()
     {
-        //
+        $ventas = Venta::latest()->get();
+        return view('ventas.index', compact('ventas'));
     }
 
     /**
@@ -29,7 +30,17 @@ class VentaController extends Controller
      */
     public function store(StoreVentaRequest $request)
     {
-        //
+        $venta = Venta::create($data);
+
+    Actividad::create([
+        'titulo'      => 'Nueva venta registrada',
+        'descripcion' => 'Venta #' . str_pad($venta->id, 5, '0', STR_PAD_LEFT),
+        'tipo'        => 'venta',
+        'user_id'     => auth()->id(),
+    ]);
+
+    return redirect()->route('ventas.index')->with('success', 'Venta registrada.');
+    
     }
 
     /**
