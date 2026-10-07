@@ -16,6 +16,9 @@
         </div>
         <div class="flex items-center gap-4 text-xs font-bold">
             <a href="{{ url('/') }}" class="text-gray-400 hover:text-white transition">Ver Tienda ↗</a>
+             <a href="{{ route('dashboard') }}" class="btn btn-outline-light font-semibold px-3 py-2 shadow-sm d-flex align-items-center gap-1">
+                🏠 Panel Principal
+            </a>
             <span class="text-gray-600">|</span>
             <span class="text-emerald-400 font-semibold">● Panel Activo</span>
         </div>

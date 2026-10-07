@@ -6,39 +6,23 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-       Schema::create('compras', function (Blueprint $table) {
-    $table->id();
-
-    $table->string('numero_compra')->unique();
-
-    $table->foreignId('proveedor_id')
-          ->constrained('proveedores')
-          ->onDelete('cascade');
-
-    $table->foreignId('usuario_id')
-          ->constrained('usuarios')
-          ->onDelete('cascade');
-
-    $table->foreignId('sucursal_id')
-          ->constrained('sucursales')
-          ->onDelete('cascade');
-
-    $table->date('fecha');
-    $table->string('forma_pago');
-    $table->decimal('total', 10, 2);
-
-    $table->timestamps();
-});
+        Schema::create('compras', function (Blueprint $table) {
+            $table->id();
+            $table->string('numero_orden')->unique(); // N° ORDEN
+            $table->string('proveedor');              // PROVEEDOR
+            $table->foreignId('producto_id')->constrained('productos')->onDelete('cascade');
+            $table->integer('cantidad');
+            $table->decimal('precio_costo', 10, 2);
+            $table->decimal('total', 10, 2);          // TOTAL
+            $table->date('fecha_pedido');             // FECHA PEDIDO
+            $table->string('estado_pedido')->default('Recibido'); // Recibido, Pendiente, Cancelado (ESTADO PEDIDO)
+            $table->unsignedBigInteger('usuario_id')->nullable();
+            $table->timestamps();
+        });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('compras');

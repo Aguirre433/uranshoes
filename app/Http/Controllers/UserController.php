@@ -2,105 +2,79 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Usuario; 
 use Illuminate\Http\Request;
-use App\Models\Usuario;
-use Spatie\Permission\Models\Role;
-use App\Models\Actividad;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-
-// Mostrar el formulario con los roles
-    public function editRoles(Usuario $user)
-    {
-        // Traemos todos los roles de la base de datos
-        $roles = Role::all(); 
-        
-        return view('users.roles', compact('user', 'roles'));
-    }
-
-    // Guardar los roles seleccionados
-    public function updateRoles(Request $request, User $user)
-    {
-        // Spatie tiene un método mágico llamado "syncRoles".
-        // Lo que hace es: mira los roles que llegaron del formulario, 
-        // se los asigna al usuario, y le quita los que no estén marcados.
-        $user->syncRoles($request->roles);
-
-        // Volvemos a la página anterior con un mensaje de éxito
-        return redirect()->back()->with('success', 'Roles actualizados correctamente.');
-    }
-
-
-
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        
-        // 1. Obtener todos los usuarios de la base de datos
-        $usuarios = Usuario::all(); 
-
-        // 2. Pasar la variable $usuarios a la vista
-        return view('users.index', compact('usuarios'));
-    
+        $users = Usuario::all();
+        return view('users.index', compact('users'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('users.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        $usuario = User::create($data);
+        $request->validate([
+            'nombre_usuario'     => 'required|string|max:255',
+            'email_usuario'      => 'required|email|unique:usuarios,email_usuario',
+            'contrasena_usuario' => 'required|string|min:6',
+            'rol_usuario'        => 'required|string',
+        ]);
 
-    Actividad::create([
-        'titulo'      => 'Nuevo usuario registrado',
-        'descripcion' => $usuario->name,
-        'tipo'        => 'usuario',
-        'user_id'     => auth()->id(),
-    ]);
+        Usuario::create([
+            'nombre_usuario'     => $request->nombre_usuario,
+            'email_usuario'      => $request->email_usuario,
+            'contrasena_usuario' => Hash::make($request->contrasena_usuario),
+            'rol_usuario'        => $request->rol_usuario,
+            'sucursal_id'        => $request->sucursal_id ?? 1,
+        ]);
 
-    return redirect()->route('users.index')->with('success', 'Usuario registrado.');
+        return redirect()->route('users.index')->with('success', 'Usuario creado correctamente.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit($id)
     {
-        //
+        $user = Usuario::findOrFail($id);
+        return view('users.edit', compact('user'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $user = Usuario::findOrFail($id);
+
+        $request->validate([
+            'nombre_usuario' => 'required|string|max:255',
+            'email_usuario'  => 'required|email|unique:usuarios,email_usuario,' . $id,
+            'rol_usuario'    => 'required|string',
+        ]);
+
+        $data = [
+            'nombre_usuario' => $request->nombre_usuario,
+            'email_usuario'  => $request->email_usuario,
+            'rol_usuario'    => $request->rol_usuario,
+        ];
+
+        if ($request->filled('contrasena_usuario')) {
+            $data['contrasena_usuario'] = Hash::make($request->contrasena_usuario);
+        }
+
+        $user->update($data);
+
+        return redirect()->route('users.index')->with('success', 'Usuario actualizado correctamente.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy($id)
     {
-        //
-    }
+        $user = Usuario::findOrFail($id);
+        $user->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect()->route('users.index')->with('success', 'Usuario eliminado correctamente.');
     }
 }

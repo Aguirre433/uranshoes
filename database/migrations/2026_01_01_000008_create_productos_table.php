@@ -33,6 +33,10 @@ return new class extends Migration
     $table->string('color')->nullable();
 
     $table->timestamps();
+
+    $table->string('imagen')->nullable()->after('proveedor');
+    $table->integer('stock')->default(0)->after('precio');
+    
 });
     }
 
@@ -43,4 +47,5 @@ return new class extends Migration
     {
         Schema::dropIfExists('productos');
     }
+
 };

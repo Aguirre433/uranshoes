@@ -50,9 +50,16 @@ class ProductoController extends Controller
             'categoria_id' => 'required|exists:categorias,id',
             'marca_id' => 'required|exists:marcas,id',
         ]);
+        // 2. Tomamos todos los datos del formulario
+        $data = $request->all();
 
-        // Guardamos el producto en la variable
-        $producto = Producto::create($request->all());
+        // 3. Si se subió una imagen, la guardamos en storage/app/public/productos
+        if ($request->hasFile('imagen')) {
+        $data['imagen'] = $request->file('imagen')->store('productos', 'public');
+    }
+
+     // 4. Creamos el producto con la imagen y stock incluidos
+        $producto = Producto::create($data);
 
         // 👈 2. Guardamos la actividad al CREAR
         Actividad::create([
@@ -93,8 +100,17 @@ class ProductoController extends Controller
             'categoria_id' => 'required|exists:categorias,id',
             'marca_id' => 'required|exists:marcas,id',
         ]);
+        $data = $request->all();
 
-        $producto->update($request->all());
+        // Si subió una nueva imagen, borrar la antigua y guardar la nueva
+        if ($request->hasFile('imagen')) {
+        if ($producto->imagen && \Storage::disk('public')->exists($producto->imagen)) {
+            \Storage::disk('public')->delete($producto->imagen);
+        }
+        $data['imagen'] = $request->file('imagen')->store('productos', 'public');
+        }
+
+        $producto->update($data);
 
         Actividad::create([
             'titulo'      => 'Producto actualizado',

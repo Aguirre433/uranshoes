@@ -131,10 +131,10 @@
 
         </div>
 
-        <!-- SECCIONES PRINCIPALES Y ACTIVIDAD -->
+        <!-- SECCIONES PRINCIPALES (2 COLUMNAS A LA IZQUIERDA, 1 A LA DERECHA) -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-            <!-- MÓDULOS DE GESTIÓN (ACCESOS RÁPIDOS) -->
+            <!-- COLUMNA IZQUIERDA: MÓDULOS DE GESTIÓN (lg:col-span-2) -->
             <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-200">
 
                 <div class="p-5 border-b border-slate-100 flex items-center justify-between">
@@ -201,34 +201,43 @@
                         </div>
                     </a>
 
-<!-- Opción: Stock -->
-<a href="{{ route('stock.index') }}" class="group flex items-center gap-4 p-4 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-white hover:border-[#1E56A0] hover:shadow-md transition">
-    <div class="text-2xl">📦</div>
-    <div>
-        <h3 class="font-semibold text-slate-800 group-hover:text-[#1E56A0]">Stock</h3>
-        <p class="text-sm text-slate-500">Control e inventario de existencias</p>
-    </div>
-</a>
+                    <!-- VENTAS -->
+                    <a href="{{ route('ventas.index') }}" 
+                       class="group flex items-center gap-4 p-4 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-white hover:border-[#1E56A0] hover:shadow-md transition">
+                        <div class="w-11 h-11 bg-white border border-slate-200 rounded-xl flex items-center justify-center text-xl group-hover:bg-[#1E56A0] group-hover:text-white group-hover:border-[#1E56A0] transition">
+                            🛒
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-sm group-hover:text-[#1E56A0] transition">
+                                Ventas
+                            </h4>
+                            <p class="text-xs text-slate-500">
+                                Historial de órdenes y facturación
+                            </p>
+                        </div>
+                    </a>
 
-<!-- Opción: Ventas -->
-<a href="{{ route('ventas.index') }}" class="group flex items-center gap-4 p-4 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-white hover:border-[#1E56A0] hover:shadow-md transition">
-    <div class="text-2xl">🛒</div>
-    <div>
-        <h3 class="font-semibold text-slate-800 group-hover:text-[#1E56A0]">Ventas</h3>
-        <p class="text-sm text-slate-500">Historial de órdenes y facturación</p>
-    </div>
-</a>
+                    <!-- COMPRAS -->
+                    <a href="{{ route('compras.index') }}" 
+                       class="group flex items-center gap-4 p-4 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-white hover:border-[#1E56A0] hover:shadow-md transition">
+                        <div class="w-11 h-11 bg-white border border-slate-200 rounded-xl flex items-center justify-center text-xl group-hover:bg-[#1E56A0] group-hover:text-white group-hover:border-[#1E56A0] transition">
+                            🛍️
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-sm group-hover:text-[#1E56A0] transition">
+                                Compras
+                            </h4>
+                            <p class="text-xs text-slate-500">
+                                Órdenes de compra y proveedores
+                            </p>
+                        </div>
+                    </a>
 
-<!-- Opción: Compras -->
-<a href="{{ route('compras.index') }}" class="group flex items-center gap-4 p-4 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-white hover:border-[#1E56A0] hover:shadow-md transition">
-    <div class="text-2xl">🛍️</div>
-    <div>
-        <h3 class="font-semibold text-slate-800 group-hover:text-[#1E56A0]">Compras</h3>
-        <p class="text-sm text-slate-500">Órdenes de compra y proveedores</p>
-    </div>
-</a>
+                </div>
 
-            <!-- ACTIVIDAD RECIENTE -->
+            </div>
+
+            <!-- COLUMNA DERECHA: ACTIVIDAD RECIENTE (1 COLUMNA) -->
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
 
                 <div>
@@ -241,77 +250,73 @@
                         </span>
                     </div>
 
-                  <div class="p-4">
+                    <div class="p-4">
+                        <div class="flex flex-col gap-4">
 
-    <div class="flex flex-col gap-4">
+                            @forelse($actividades as $actividad)
 
-        @forelse($actividades as $actividad)
+                                <div class="flex items-center gap-3">
 
-            <div class="flex items-center gap-3">
+                                    {{-- ICONO --}}
+                                    <div class="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center shrink-0">
 
-                {{-- ICONO --}}
-                <div class="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center">
+                                        @if($actividad->tipo == 'producto')
+                                            <i class="bi bi-shoe-prints text-blue-500"></i>
 
-                    @if($actividad->tipo == 'producto')
-                        <i class="bi bi-shoe-prints text-blue-500"></i>
+                                        @elseif($actividad->tipo == 'categoria')
+                                            <i class="bi bi-folder-fill text-yellow-500"></i>
 
-                    @elseif($actividad->tipo == 'categoria')
-                        <i class="bi bi-folder-fill text-yellow-500"></i>
+                                        @elseif($actividad->tipo == 'venta')
+                                            <i class="bi bi-cart-check text-cyan-500"></i>
 
-                    @elseif($actividad->tipo == 'venta')
-                        <i class="bi bi-cart-check text-cyan-500"></i>
+                                        @elseif($actividad->tipo == 'compra')
+                                            <i class="bi bi-bag-check text-green-500"></i>
 
-                    @elseif($actividad->tipo == 'compra')
-                        <i class="bi bi-bag-check text-green-500"></i>
+                                        @elseif($actividad->tipo == 'stock')
+                                            <i class="bi bi-box-seam text-red-500"></i>
 
-                    @elseif($actividad->tipo == 'stock')
-                        <i class="bi bi-box-seam text-red-500"></i>
+                                        @else
+                                            <i class="bi bi-person-fill text-blue-500"></i>
+                                        @endif
 
-                    @else
-                        <i class="bi bi-person-fill text-blue-500"></i>
-                    @endif
+                                    </div>
 
+                                    {{-- INFORMACIÓN --}}
+                                    <div class="min-w-0">
+                                        <p class="text-xs font-bold text-slate-800 truncate">
+                                            {{ $actividad->titulo }}
+                                        </p>
+                                        <p class="text-xs text-slate-500 truncate">
+                                            {{ $actividad->descripcion }}
+                                        </p>
+                                        <p class="text-[11px] text-slate-400">
+                                            {{ $actividad->created_at ? $actividad->created_at->diffForHumans() : 'Hace un momento' }}
+                                        </p>
+                                    </div>
+
+                                </div>
+
+                            @empty
+
+                                <p class="text-xs text-slate-500 text-center py-4">
+                                    No hay actividad reciente registrada.
+                                </p>
+
+                            @endforelse
+
+                        </div>
+                    </div>
                 </div>
 
-                {{-- INFORMACIÓN --}}
-                <div class="min-w-0">
-
-                    <p class="text-xs font-bold text-slate-800">
-                        {{ $actividad->titulo }}
-                    </p>
-
-                    <p class="text-xs text-slate-500">
-                        {{ $actividad->descripcion }}
-                    </p>
-
-                    <p class="text-[11px] text-slate-400">
-                        {{ $actividad->created_at->diffForHumans() }}
-                    </p>
-
+                <div class="px-4 py-3 border-t border-slate-100 text-center">
+                    <span class="text-xs text-slate-400">
+                        Historial actualizado en tiempo real
+                    </span>
                 </div>
 
             </div>
 
-        @empty
-
-            <p class="text-xs text-slate-500">
-                No hay actividad reciente registrada.
-            </p>
-
-        @endforelse
-
-    </div>
-
-</div>
-
-<div class="px-4 py-3 border-t border-slate-100 text-center">
-    <span class="text-xs text-slate-400">
-        Historial actualizado en tiempo real
-    </span>
-</div>
-
-    </div>
-</div>
+        </div>
 
         <!-- FOOTER / BANNER DEL DASHBOARD -->
         <div class="bg-slate-900 text-white rounded-2xl p-5 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">

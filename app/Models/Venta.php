@@ -7,30 +7,29 @@ use Illuminate\Database\Eloquent\Model;
 
 class Venta extends Model
 {
-    /** @use HasFactory<\Database\Factories\VentaFactory> */
     use HasFactory;
+
+    protected $table = 'ventas';
+
     protected $fillable = [
-        'cliente_id',
+        'codigo_factura',
+        'cliente_nombre',
         'producto_id',
         'cantidad',
-        'comprobante_id',
-        'total_venta',
+        'precio_unitario',
+        'total',
+        'metodo_pago',
+        'estado',
+        'usuario_id',
     ];
 
-    public function cliente()
+    public function producto()
     {
-        return $this->belongsTo(Clientes::class, 'cliente_id');
+        return $this->belongsTo(Producto::class, 'producto_id');
     }
 
-    public function empleado()
+    public function usuario()
     {
-        return $this->belongsTo(Usuario::class, 'Usuario_id');
-    
-    }
-
-    public function comprobante(){
-
-        return$this->belongsTo(Comprobante::class, 'comprobante_id');
-
+        return $this->belongsTo(Usuario::class, 'usuario_id');
     }
 }

@@ -4,31 +4,28 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Comprobantes;
 
 class Compra extends Model
 {
-    /** @use HasFactory<\Database\Factories\ComprasFactory> */
     use HasFactory;
+
+    protected $table = 'compras';
+
     protected $fillable = [
-        'proveedor_id',
+        'numero_orden',
+        'proveedor',
+        'producto_id',
+        'cantidad',
+        'precio_costo',
+        'total',
+        'fecha_pedido',
+        'estado_pedido',
         'usuario_id',
-        'comprobante_id',
-        'total_compra',
     ];
 
-    public function Proveedor()
+    public function producto()
     {
-        return $this->belongTo(Proveedor::class, 'proveedor_id');
+        return $this->belongsTo(Producto::class, 'producto_id');
     }
-
-    public function empleado()
-    {
-        return $this->belongsTo(Ususario::class, 'usuario_id');
-    }
-
-    public function comprobante()
-    {
-        return $this->belongsTo(Comprobante::class, 'comprobante_id');
-    }
+    
 }

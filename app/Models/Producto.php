@@ -22,6 +22,8 @@ class Producto extends Model
         'precio', 
         'talle', 
         'color', 
+        'imagen',
+        'stock',
         'categoria_id', 
         'marca_id',
         'proveedor_id'

@@ -8,6 +8,8 @@ use App\Http\Controllers\StockController;
 use App\Http\Controllers\ComprasController;
 use App\Http\Controllers\VentaController;
 use App\Models\Actividad;
+use App\Http\Controllers\ProductoController;
+
 
 
 // -----------------------------------------------------------------------------
@@ -73,10 +75,16 @@ Route::get('/tutorial', function () {
 
 require __DIR__.'/auth.php';
 
-use App\Http\Controllers\ProductoController;
 
 Route::resource('productos', ProductoController::class);
 Route::resource('categorias', CategoriasController::class);
 Route::get('/stock', [StockController::class, 'index'])->name('stock.index');
 Route::get('/ventas', [VentaController::class, 'index'])->name('ventas.index');
 Route::get('/compras', [ComprasController::class, 'index'])->name('compras.index');
+Route::middleware(['auth'])->group(function () {
+    Route::resource('ventas', VentaController::class);
+});
+
+    Route::middleware(['auth'])->group(function () {
+    Route::resource('compras', ComprasController::class);
+});

@@ -3,75 +3,86 @@
 namespace App\Http\Controllers;
 
 use App\Models\Venta;
-use App\Http\Requests\StoreVentaRequest;
-use App\Http\Requests\UpdateVentaRequest;
+use App\Models\Producto;
+use App\Models\Actividad;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class VentaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $ventas = Venta::latest()->get();
-        return view('ventas.index', compact('ventas'));
+        $ventas = Venta::with('producto')->orderBy('id', 'desc')->get();
+        $productos = Producto::all();
+        return view('ventas.index', compact('ventas', 'productos'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $productos = Producto::where('stock', '>', 0)->get();
+        return view('ventas.create', compact('productos'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreVentaRequest $request)
+    public function store(Request $request)
     {
-        $venta = Venta::create($data);
+        $request->validate([
+            'cliente_nombre' => 'required|string|max:255',
+            'producto_id'    => 'required|exists:productos,id',
+            'cantidad'       => 'required|integer|min:1',
+            'metodo_pago'    => 'required|string',
+        ]);
 
-    Actividad::create([
-        'titulo'      => 'Nueva venta registrada',
-        'descripcion' => 'Venta #' . str_pad($venta->id, 5, '0', STR_PAD_LEFT),
-        'tipo'        => 'venta',
-        'user_id'     => auth()->id(),
-    ]);
+        $producto = Producto::findOrFail($request->producto_id);
 
-    return redirect()->route('ventas.index')->with('success', 'Venta registrada.');
-    
+        // Validar si hay stock suficiente
+        if ($producto->stock < $request->cantidad) {
+            return back()->withInput()->with('error', 'No hay stock suficiente para realizar esta venta. Stock disponible: ' . $producto->stock);
+        }
+
+        $total = $producto->precio * $request->cantidad;
+
+        // Obtener el ID del usuario autenticado de forma explícita
+        $usuario = auth()->user();
+        $usuarioId = $usuario ? ($usuario->id ?? $usuario->id_usuario ?? null) : null;
+
+        // 1. Registrar la venta
+        $venta = Venta::create([
+            'codigo_factura' => 'VEN-' . strtoupper(Str::random(6)),
+            'cliente_nombre' => $request->cliente_nombre,
+            'producto_id'    => $producto->id,
+            'cantidad'       => $request->cantidad,
+            'precio_unitario'=> $producto->precio,
+            'total'          => $total,
+            'metodo_pago'    => $request->metodo_pago,
+            'estado'         => 'Completada',
+            'usuario_id'     => $usuarioId,
+        ]);
+
+        // 2. Descontar el stock en la tabla productos
+        $producto->decrement('stock', $request->cantidad);
+
+        // 3. Registrar en Actividad reciente
+        Actividad::create([
+            'titulo'      => 'Nueva Venta Registrada',
+            'descripcion' => "Venta {$venta->codigo_factura} - {$producto->nombre} (x{$request->cantidad})",
+            'tipo'        => 'venta',
+            'user_id'     => $usuarioId,
+        ]);
+
+        return redirect()->route('ventas.index')->with('success', 'Venta registrada con éxito y stock actualizado.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Venta $venta)
+    public function destroy($id)
     {
-        //
-    }
+        $venta = Venta::findOrFail($id);
+        
+        // Devolver el stock si se anula la venta
+        if ($venta->producto) {
+            $venta->producto->increment('stock', $venta->cantidad);
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Venta $venta)
-    {
-        //
-    }
+        $venta->delete();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateVentaRequest $request, Venta $venta)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Venta $venta)
-    {
-        //
+        return redirect()->route('ventas.index')->with('success', 'Venta anulada correctamente y stock devuelto.');
     }
 }
